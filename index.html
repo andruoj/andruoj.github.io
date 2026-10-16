@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Joel Ojal | root@Joel Ojal</title>
+<meta name="description" content="Joel Ojal - Cybersecurity • Linux • Technology. Digital calling card.">
+<meta name="theme-color" content="#000000">
+<meta property="og:title" content="Joel Ojal | Cybersecurity • Linux • Technology">
+<meta property="og:description" content="Hacker calling card. Tap to connect.">
+<meta property="og:type" content="profile">
+<style>
+  :root{
+    --g:#00ff41; --g2:#00c832; --g3:#0a3d17; --bg:#000; --panel:rgba(0,12,3,.88);
+    --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", "DejaVu Sans Mono", monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    background:var(--bg); color:var(--g); font-family:var(--mono);
+    font-size:15px; line-height:1.55; overflow-x:hidden;
+    display:flex; align-items:center; justify-content:center; padding:16px;
+  }
+  #rain{position:fixed; inset:0; width:100%; height:100%; z-index:0; opacity:.35}
+  .scan{position:fixed; inset:0; z-index:1; pointer-events:none;
+    background:repeating-linear-gradient(to bottom, rgba(0,0,0,0) 0, rgba(0,0,0,0) 2px, rgba(0,0,0,.18) 3px);}
+  .win{
+    position:relative; z-index:2; width:100%; max-width:640px;
+    background:var(--panel); border:1px solid var(--g2); border-radius:10px;
+    box-shadow:0 0 24px rgba(0,255,65,.25), inset 0 0 30px rgba(0,255,65,.05);
+    overflow:hidden;
+  }
+  .bar{display:flex; align-items:center; gap:8px; padding:8px 12px;
+    background:#031a08; border-bottom:1px solid var(--g3); font-size:12px; color:var(--g2)}
+  .dot{width:10px; height:10px; border-radius:50%; background:var(--g3); border:1px solid var(--g2)}
+  .bar .t{margin-left:auto; margin-right:auto; opacity:.9}
+  #term{padding:16px; min-height:300px; white-space:pre-wrap; word-break:break-word;
+    text-shadow:0 0 6px rgba(0,255,65,.6)}
+  .p{color:var(--g)} .p b{color:#fff; font-weight:700}
+  .dim{color:#5fbf72}
+  .cur{display:inline-block; width:.6em; height:1.05em; background:var(--g); vertical-align:text-bottom;
+    animation:blink 1s steps(1) infinite}
+  @keyframes blink{50%{opacity:0}}
+  #card{display:none; padding:0 16px 18px}
+  #card.show{display:block; animation:fade .6s ease}
+  @keyframes fade{from{opacity:0; transform:translateY(6px)}to{opacity:1; transform:none}}
+  .id{border:1px dashed var(--g2); border-radius:8px; padding:14px; margin-bottom:14px}
+  .id h1{font-size:22px; letter-spacing:.5px; text-shadow:0 0 8px var(--g)}
+  .id .role{color:#9dffb3; margin-top:2px}
+  .tags{display:flex; flex-wrap:wrap; gap:6px; margin-top:10px}
+  .tag{border:1px solid var(--g2); padding:1px 8px; border-radius:20px; font-size:12px}
+  .links{display:grid; gap:8px}
+  .links a, .btn{
+    display:flex; align-items:center; gap:10px; padding:11px 12px;
+    color:var(--g); text-decoration:none; background:rgba(0,255,65,.05);
+    border:1px solid var(--g3); border-radius:6px; font:inherit; cursor:pointer; width:100%; text-align:left;
+    transition:background .15s, box-shadow .15s, border-color .15s;
+  }
+  .links a:hover,.btn:hover,.links a:focus-visible,.btn:focus-visible{
+    background:rgba(0,255,65,.16); border-color:var(--g); box-shadow:0 0 12px rgba(0,255,65,.4); outline:none}
+  .k{color:#5fbf72; min-width:74px}
+  .btn.primary{background:var(--g); color:#001a06; border-color:var(--g); font-weight:700; justify-content:center; margin-top:14px; text-shadow:none}
+  .btn.primary:hover{background:#7dff9c}
+  #skip{position:fixed; right:12px; bottom:12px; z-index:3; background:transparent; color:var(--g2);
+    border:1px solid var(--g3); border-radius:4px; font:12px var(--mono); padding:5px 9px; cursor:pointer}
+  #toast{position:fixed; left:50%; bottom:56px; transform:translateX(-50%); z-index:5; background:var(--g); color:#001a06;
+    padding:8px 14px; border-radius:6px; font-size:13px; opacity:0; pointer-events:none; transition:opacity .25s}
+  #toast.on{opacity:1}
+  .foot{text-align:center; color:#3f8f50; font-size:11px; margin-top:12px}
+  @media (prefers-reduced-motion:reduce){ .cur{animation:none} #card.show{animation:none} }
+</style>
+</head>
+<body>
+<canvas id="rain" aria-hidden="true"></canvas>
+<div class="scan" aria-hidden="true"></div>
+
+<main class="win" role="main">
+  <div class="bar" aria-hidden="true">
+    <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+    <span class="t">root@Joel Ojal: ~</span>
+  </div>
+  <div id="term" aria-live="polite"></div>
+
+  <section id="card" aria-label="Contact card">
+    <div class="id">
+      <h1>Joel Ojal</h1>
+      <div class="role">Cybersecurity • Linux • Technology</div>
+      <div class="dim" style="margin-top:8px;font-size:13px">&gt; I use AI as a tool. The design, choices and responsibility are mine.</div>
+      <div class="tags">
+        <span class="tag">infosec</span><span class="tag">linux</span><span class="tag">tech</span>
+      </div>
+    </div>
+    <div class="links" id="links"></div>
+    <button class="btn primary" id="save" type="button">&#9660; SAVE CONTACT</button>
+    <div class="foot">no ads &bull; no trackers &bull; no cookies &bull; static page</div>
+  </section>
+</main>
+
+<button id="skip" type="button">skip &raquo;</button>
+<div id="toast" role="status"></div>
+
+<script>
+/* =====================================================
+   EDIT THIS BLOCK: replace every placeholder below
+   ===================================================== */
+const CONFIG = {
+  alias:   "root@Joel Ojal",
+  first:   "Joel",
+  last:    "Ojal",
+  title:   "Cybersecurity • Linux • Technology",
+  org:     "",                                   // optional, e.g. "Your Company" (leave "" to skip)
+  phone:   "+000 000 000 000",                   // PLACEHOLDER
+  email:   "your.email@example.com",             // PLACEHOLDER
+  website: "https://your-website.example",       // PLACEHOLDER
+  github:  "https://github.com/your-username",   // PLACEHOLDER
+  linkedin:"https://www.linkedin.com/in/your-handle", // PLACEHOLDER
+  x:       "",                                   // optional, e.g. "https://x.com/handle"
+  location:"City, Country"                       // PLACEHOLDER
+};
+/* ===================================================== */
+
+const $ = s => document.querySelector(s);
+const term = $("#term");
+let skipped = false;
+
+/* ---------- Matrix rain ---------- */
+(function(){
+  const c = $("#rain"), x = c.getContext("2d");
+  const chars = "ｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉ0123456789ABCDEF<>/{}$#";
+  let cols, drops, fs = 16;
+  function size(){
+    c.width = innerWidth; c.height = innerHeight;
+    cols = Math.ceil(c.width / fs);
+    drops = Array.from({length: cols}, () => Math.random() * -50);
+  }
+  size(); addEventListener("resize", size);
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  setInterval(() => {
+    x.fillStyle = "rgba(0,0,0,.09)"; x.fillRect(0,0,c.width,c.height);
+    x.fillStyle = "#00ff41"; x.font = fs + "px monospace";
+    for (let i = 0; i < cols; i++){
+      x.fillText(chars[Math.floor(Math.random()*chars.length)], i*fs, drops[i]*fs);
+      if (drops[i]*fs > c.height && Math.random() > .975) drops[i] = 0;
+      drops[i]++;
+    }
+  }, 55);
+})();
+
+/* ---------- Terminal animation ---------- */
+const sleep = ms => new Promise(r => setTimeout(r, skipped ? 0 : ms));
+const esc = s => s.replace(/[&<>]/g, m => ({"&":"&amp;","<":"&lt;",">":"&gt;"}[m]));
+const prompt = () => `<span class="p"><b>${esc(CONFIG.alias)}</b>:<span style="color:#7dd3ff">~</span>$ </span>`;
+
+async function typeCmd(cmd){
+  const line = document.createElement("div");
+  line.innerHTML = prompt() + '<span class="t"></span><span class="cur"></span>';
+  term.appendChild(line);
+  const t = line.querySelector(".t");
+  for (const ch of cmd){
+    t.textContent += ch;
+    await sleep(35 + Math.random()*45);
+  }
+  line.querySelector(".cur").remove();
+  await sleep(250);
+}
+async function out(html, delay = 120){
+  const d = document.createElement("div");
+  d.innerHTML = html; term.appendChild(d);
+  await sleep(delay);
+}
+
+async function run(){
+  await out('<span class="dim">Booting secure shell... [OK]</span>', 350);
+  await out('<span class="dim">Establishing encrypted channel... [OK]</span>', 350);
+  await out('<span class="dim">Access granted.</span><br>', 400);
+
+  await typeCmd("whoami");
+  await out(esc(CONFIG.first + " " + CONFIG.last) + "<br>");
+
+  await typeCmd("cat profile.txt");
+  await out("role     : " + esc(CONFIG.title), 200);
+  await out("focus    : cybersecurity, linux, technology", 200);
+  await out("status   : online", 200);
+  await out("mission  : secure systems, open knowledge", 200);
+  await out("ethos    : I use AI as a tool. The design, choices and responsibility are mine.<br>", 300);
+
+  await typeCmd("./connect --card");
+  await out('<span class="dim">Loading contact card...</span>', 500);
+  finish();
+}
+
+function finish(){
+  $("#skip").style.display = "none";
+  $("#card").classList.add("show");
+  if (!term.querySelector(".cur")){
+    const d = document.createElement("div");
+    d.innerHTML = prompt() + '<span class="cur"></span>';
+    term.appendChild(d);
+  }
+}
+
+$("#skip").addEventListener("click", () => {
+  skipped = true;
+  term.innerHTML = "";
+  [
+    "Access granted.<br>",
+    "$ whoami<br>" + esc(CONFIG.first + " " + CONFIG.last) + "<br>"
+  ].forEach(h => { const d = document.createElement("div"); d.innerHTML = h; term.appendChild(d); });
+  finish();
+});
+
+/* ---------- Links ---------- */
+(function(){
+  const rows = [
+    ["phone",    CONFIG.phone,    CONFIG.phone ? "tel:" + CONFIG.phone.replace(/[^+\d]/g,"") : ""],
+    ["email",    CONFIG.email,    CONFIG.email ? "mailto:" + CONFIG.email : ""],
+    ["web",      CONFIG.website,  CONFIG.website],
+    ["github",   CONFIG.github,   CONFIG.github],
+    ["linkedin", CONFIG.linkedin, CONFIG.linkedin],
+    ["x",        CONFIG.x,        CONFIG.x],
+    ["location", CONFIG.location, ""]
+  ];
+  const box = $("#links");
+  rows.forEach(([k, label, href]) => {
+    if (!label) return;
+    const el = document.createElement(href ? "a" : "div");
+    if (href){ el.href = href; if (/^https?:/.test(href)){ el.target = "_blank"; el.rel = "noopener noreferrer"; } }
+    else { el.style.cssText = "display:flex;gap:10px;padding:11px 12px;border:1px solid #0a3d17;border-radius:6px"; }
+    el.innerHTML = `<span class="k">${k}</span><span>${esc(label.replace(/^https?:\/\//,""))}</span>`;
+    box.appendChild(el);
+  });
+})();
+
+/* ---------- Save contact (vCard) ---------- */
+function toast(m){ const t = $("#toast"); t.textContent = m; t.classList.add("on"); setTimeout(() => t.classList.remove("on"), 2200); }
+const vEsc = s => String(s).replace(/([,;\\])/g, "\\$1").replace(/\n/g, "\\n");
+
+$("#save").addEventListener("click", () => {
+  const L = ["BEGIN:VCARD", "VERSION:3.0",
+    `N:${vEsc(CONFIG.last)};${vEsc(CONFIG.first)};;;`,
+    `FN:${vEsc(CONFIG.first + " " + CONFIG.last)}`,
+    `NICKNAME:${vEsc(CONFIG.alias)}`,
+    `TITLE:${vEsc(CONFIG.title)}`];
+  if (CONFIG.org)      L.push(`ORG:${vEsc(CONFIG.org)}`);
+  if (CONFIG.phone)    L.push(`TEL;TYPE=CELL:${CONFIG.phone}`);
+  if (CONFIG.email)    L.push(`EMAIL;TYPE=INTERNET:${CONFIG.email}`);
+  if (CONFIG.website)  L.push(`URL:${CONFIG.website}`);
+  if (CONFIG.github)   L.push(`URL;TYPE=GitHub:${CONFIG.github}`);
+  if (CONFIG.linkedin) L.push(`URL;TYPE=LinkedIn:${CONFIG.linkedin}`);
+  if (CONFIG.x)        L.push(`URL;TYPE=X:${CONFIG.x}`);
+  if (CONFIG.location) L.push(`ADR;TYPE=HOME:;;${vEsc(CONFIG.location)};;;;`);
+  L.push("NOTE:Cybersecurity • Linux • Technology", "END:VCARD");
+
+  const blob = new Blob([L.join("\r\n") + "\r\n"], {type: "text/vcard;charset=utf-8"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = "Joel-Ojal.vcf";
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1500);
+  toast("> contact file ready");
+});
+
+run();
+</script>
+</body>
+</html>
