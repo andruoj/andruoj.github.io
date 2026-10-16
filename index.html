@@ -15,17 +15,17 @@
     --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", "DejaVu Sans Mono", monospace;
   }
   *{box-sizing:border-box;margin:0;padding:0}
-  html,body{height:100%}
+  html{height:100%}
   body{
     background:var(--bg); color:var(--g); font-family:var(--mono);
     font-size:15px; line-height:1.55; overflow-x:hidden;
-    display:flex; align-items:center; justify-content:center; padding:16px;
+    display:flex; min-height:100%; padding:16px;
   }
   #rain{position:fixed; inset:0; width:100%; height:100%; z-index:0; opacity:.35}
   .scan{position:fixed; inset:0; z-index:1; pointer-events:none;
     background:repeating-linear-gradient(to bottom, rgba(0,0,0,0) 0, rgba(0,0,0,0) 2px, rgba(0,0,0,.18) 3px);}
   .win{
-    position:relative; z-index:2; width:100%; max-width:640px;
+    position:relative; z-index:2; width:100%; max-width:640px; margin:auto;
     background:var(--panel); border:1px solid var(--g2); border-radius:10px;
     box-shadow:0 0 24px rgba(0,255,65,.25), inset 0 0 30px rgba(0,255,65,.05);
     overflow:hidden;
@@ -192,6 +192,7 @@ async function run(){
 function finish(){
   $("#skip").style.display = "none";
   $("#card").classList.add("show");
+  setTimeout(() => $("#card").scrollIntoView({behavior:"smooth", block:"start"}), 150);
   if (!term.querySelector(".cur")){
     const d = document.createElement("div");
     d.innerHTML = prompt() + '<span class="cur"></span>';
@@ -260,6 +261,7 @@ $("#save").addEventListener("click", () => {
   toast("> contact file ready");
 });
 
+new MutationObserver(() => scrollTo(0, document.body.scrollHeight)).observe(term, {childList:true, subtree:true});
 run();
 </script>
 </body>
